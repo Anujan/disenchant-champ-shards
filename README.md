@@ -13,3 +13,8 @@ The script works as well, if you don't want the compiled exe. You'll need Ruby i
 
 ## Restrictions
 This only works on Windows. I don't have access to a macOS laptop so I can't test it. Feel free to make a PR with support for macOS :)
+
+
+## Will I get banned?
+You shouldn't as it uses official APIs provided by Riot https://developer.riotgames.com/docs/lol#league-client
+
