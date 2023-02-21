@@ -19,14 +19,23 @@ def run
         end
         puts "Filtered down to  #{player_loot.length} loot items that are owned champions"
     end
-    
+
     threads = player_loot.map do |loot|
         Thread.new do
             create_client(port) do |disenchant_http|
-                puts "Disenchanting #{loot["itemDesc"]} shards"
-                disenchant_req = disenchant(host, disenchant_http, loot["lootName"], loot["count"])
-                set_headers(disenchant_req, token)
-                disenchant_http.request disenchant_req
+                count = loot["count"]
+
+                repeat = count - 2
+                if repeat <= 0
+                    puts "Keeping #{count} #{loot["itemDesc"]} shards"
+                else
+                    puts "Disenchanting #{repeat} #{loot["itemDesc"]} shards"
+
+                    disenchant_req = disenchant(host, disenchant_http, loot["lootName"], repeat)
+                    set_headers(disenchant_req, token)
+                    disenchant_http.request disenchant_req
+                end
+
             end
         end
     end
@@ -38,7 +47,7 @@ def read_lockfile
     contents = File.read("lockfile")
     _leagueclient,_unkPort,port,password = contents.split(":")
     token = Base64.encode64("riot:#{password.chomp}")
-    
+
     [port, token]
 end
 
